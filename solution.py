@@ -7,3 +7,39 @@ root = Tk()
 root.geometry('1200x600')
 root['bg'] = 'purple'
 root.title('Language Translator')
+
+#title label
+Label(
+    root, text='Language Translator', font=('Times New Roman', 20), bg='purple', fg='white').pack(pady=10)
+
+#Label for enter text
+Label(
+    root, text='Enter Text:', font=('Times New Roman', 15), bg='purple', fg='white').place(x=20, y=60)
+
+Input_text = Entry(
+    root, width=50, font=('Times New Roman', 15))
+Input_text.place(x=25, y=100)
+
+# translated text
+Label(
+    root, text='Translated Text:', font=('Times New Roman', 15), bg='purple', fg='white').place(x=20, y=150)
+Output_text = Text(
+    root, width=50, height=10, font=('Times New Roman', 15))
+Output_text.place(x=25, y=200)
+
+language = list(LANGUAGES.values())
+# Create a list of languages for user selection (dropdown menu)
+dest_lang = ttk.Combobox(root, values=language, font=('Times New Roman', 15), width=20)
+dest_lang.place(x=25, y=450)
+dest_lang.set('Select Language')  
+
+# Function to translate text
+def Translate():
+    try:
+        translator = translator(to_lang=dest_lang.get())
+        translation = translator.translate(Input_text.get())
+        Output_text.delete(1.0, END)
+        Output_text.insert(END, translation)
+    except Exception as e:
+        print(f"Translation Error: {e}")
+
