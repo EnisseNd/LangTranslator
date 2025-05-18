@@ -1,6 +1,7 @@
 # Simple GUI Application for Language Translation, uses Google Translate API
 
-from googletrans import LANGUAGES
+import asyncio
+from googletrans import LANGUAGES, Translator
 from tkinter import *
 from tkinter import ttk
 
@@ -37,20 +38,39 @@ dest_lang.set('Select Language')
 
 # Function to translate text
 def Translate():
-    try:
-        translator = translator(to_lang=dest_lang.get())
-        translation = translator.translate(Input_text.get())
-        Output_text.delete(1.0, END)
-        Output_text.insert(END, translation)
-    except Exception as e:
-        print(f"Translation Error: {e}")
+    async def do_translate():
+        try:
+            translator = Translator()
+             # Get the language code from the selected language name
+            selected_lang = dest_lang.get()
+            if selected_lang == 'Select Language' or not selected_lang:
+                Output_text.delete(1.0, END)
+                Output_text.insert(END, "Please select a language.")
+                return
+            lang_code = [code for code, name in LANGUAGES.items() if name.lower() == selected_lang.lower()]
+            if not lang_code:
+                Output_text.delete(1.0, END)
+                Output_text.insert(END, "Invalid language selected.")
+                return
+            translation = await translator.translate(Input_text.get(), dest=lang_code[0])
+            Output_text.delete(1.0, END)
+            Output_text.insert(END, translation.text)
+        except Exception as e:
+            Output_text.delete(1.0, END)
+            Output_text.insert(END, f"Translation Error: {e}")
+    
+    asyncio.run(do_translate())
+
+    
 
 # initiate translation button
-trans_button = Button(root, text='Translate', font=('Times New Roman', 15), bg='purple', fg='white', command=Translate, activebackground= 'yellow')
+trans_button = Button(
+    root, text='Translate', font=('Times New Roman', 15), bg='purple', fg='white', command=Translate, activebackground= 'yellow')
 trans_button.place(x=25, y=500)
 
 #exit button
-exit_button = Button(root, text='Exit', font=('Times New Roman', 15), bg='purple', fg='white', command=root.quit, activebackground= 'pink')
+exit_button = Button(
+    root, text='Exit', font=('Times New Roman', 15), bg='purple', fg='white', command=root.quit, activebackground= 'pink')
 exit_button.place(x=200, y=500)
 
 # Run the main loop
