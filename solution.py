@@ -1,3 +1,5 @@
+# Simple GUI Application for Language Translation, uses Google Translate API
+
 from googletrans import LANGUAGES
 from tkinter import *
 from tkinter import ttk
@@ -42,4 +44,15 @@ def Translate():
         Output_text.insert(END, translation)
     except Exception as e:
         print(f"Translation Error: {e}")
+
+# initiate translation button
+trans_button = Button(root, text='Translate', font=('Times New Roman', 15), bg='purple', fg='white', command=Translate, activebackground= 'yellow')
+trans_button.place(x=25, y=500)
+
+#exit button
+exit_button = Button(root, text='Exit', font=('Times New Roman', 15), bg='purple', fg='white', command=root.quit, activebackground= 'pink')
+exit_button.place(x=200, y=500)
+
+# Run the main loop
+root.mainloop()
 
