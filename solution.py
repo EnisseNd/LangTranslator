@@ -21,19 +21,20 @@ Label(
 
 Input_text = Entry(
     root, width=50, font=('Times New Roman', 15))
+
 Input_text.place(x=25, y=100)
 
 # translated text
 Label(
-    root, text='Translated Text:', font=('Times New Roman', 15), bg='purple', fg='white').place(x=20, y=150)
+    root, text='Translated Text:', font=('Times New Roman', 15), bg='purple', fg='white').place(x=20, y=210)
 Output_text = Text(
     root, width=50, height=10, font=('Times New Roman', 15))
-Output_text.place(x=25, y=200)
+Output_text.place(x=25, y=250)
 
 language = list(LANGUAGES.values())
 # Create a list of languages for user selection (dropdown menu)
 dest_lang = ttk.Combobox(root, values=language, font=('Times New Roman', 15), width=20)
-dest_lang.place(x=25, y=450)
+dest_lang.place(x=25, y=150)
 dest_lang.set('Select Language')  
 
 # Function to translate text
