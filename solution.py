@@ -1,6 +1,5 @@
 # Simple GUI Application for Language Translation, uses Google Translate API
 
-import asyncio
 from googletrans import LANGUAGES, Translator
 from tkinter import *
 from tkinter import ttk
@@ -39,29 +38,27 @@ dest_lang.set('Select Language')
 
 # Function to translate text
 def Translate():
-    async def do_translate():
-        try:
-            translator = Translator()
-             # Get the language code from the selected language name
-            selected_lang = dest_lang.get()
-            if selected_lang == 'Select Language' or not selected_lang:
-                Output_text.delete(1.0, END)
-                Output_text.insert(END, "Please select a language.")
-                return
-            lang_code = [code for code, name in LANGUAGES.items() if name.lower() == selected_lang.lower()]
-            if not lang_code:
-                Output_text.delete(1.0, END)
-                Output_text.insert(END, "Invalid language selected.")
-                return
-            translation = await translator.translate(Input_text.get(), dest=lang_code[0])
+    try:
+        translator = Translator()
+        # Get the language code from the selected language name
+        selected_lang = dest_lang.get()
+        if selected_lang == 'Select Language' or not selected_lang:
             Output_text.delete(1.0, END)
-            Output_text.insert(END, translation.text)
-        except Exception as e:
+            Output_text.insert(END, "Please select a language.")
+            return
+        lang_code = [code for code, name in LANGUAGES.items() if name.lower() == selected_lang.lower()]
+        if not lang_code:
             Output_text.delete(1.0, END)
-            Output_text.insert(END, f"Translation Error: {e}")
+            Output_text.insert(END, "Invalid language selected.")
+            return
+        # Remove await and asyncio
+        translation = translator.translate(Input_text.get(), dest=lang_code[0])
+        Output_text.delete(1.0, END)
+        Output_text.insert(END, translation.text)
+    except Exception as e:
+        Output_text.delete(1.0, END)
+        Output_text.insert(END, f"Translation Error: {e}")
     
-    asyncio.run(do_translate())
-
     
 
 # initiate translation button
@@ -76,4 +73,3 @@ exit_button.place(x=200, y=500)
 
 # Run the main loop
 root.mainloop()
-
